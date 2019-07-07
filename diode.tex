@@ -1,0 +1,138 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[brazilian]{babel}
+
+\renewcommand*\familydefault{\sfdefault}
+
+\usepackage[
+			paper=a4paper,
+% 			showframe,
+% 			includeheadfoot,
+			top=1.5cm, 
+			bottom=1.5cm, 
+			left=1.5cm,
+			right=1.5cm,
+			head=0cm,
+			foot=0cm,
+			headheight=0cm,
+			headsep=0cm,
+			marginparsep=0cm,
+			footskip=0cm
+			]{geometry}
+			
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{siunitx}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{circuitikz}
+\usepackage{booktabs}
+
+\pagenumbering{gobble}
+
+% \setlength{\columnseprule}{1pt} %Separator ruler width
+% \def\columnseprulecolor{\color{blue}} %Separator ruler colour
+
+\title{Diode Cheat Sheet}
+\author{Rafael Marinho}
+\date{}
+
+\begin{document}
+\maketitle
+\section*{General Constants}
+\begin{multicols}{3}
+\noindent
+\begin{align*}
+q &= 1.6\times10^{-19}\\
+k &= 1.38\times10^{-23}\\
+\end{align*}
+\begin{align*}
+\mu_n &\approx 1350\,cm^2/(V\cdot s)\\
+\mu_p &\approx 480\,cm^2/(V\cdot s)\\
+\end{align*}
+\begin{align*}
+D_n &\approx 34\,cm^2/s\\
+D_p &\approx 12\,cm^2/s\\
+\end{align*}
+\end{multicols}
+\section*{PN Junction}
+\subsection*{General semiconductor equations}
+\begin{minipage}{0.15\linewidth}
+    \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm,scale=0.6,american voltages]
+    \draw 
+        (0, 0)
+        to [D, european] (0, -3);
+    \draw ( 0,  0) node[circ]{} node[left]{+};
+    \draw ( 0, -3) node[circ]{} node[left]{--};
+    
+    \draw 
+        (2, 0)
+        to [D, european] (2, -3);
+    \draw ( 2,  0) node[circ]{} node[right]{--};
+    \draw ( 2, -3) node[circ]{} node[right]{+};
+    
+    \draw (1,2) node[]{\textbf{Polarization}};
+    \draw (0,1) node[]{\footnotesize\textbf{Direct}};
+    \draw (2,1) node[]{\footnotesize\textbf{Inverse}};
+    \end{circuitikz}
+\end{minipage}
+\begin{minipage}{0.8\linewidth}
+\setlength\columnsep{0pt}
+\begin{multicols}{2}
+{\centering
+\begin{tabular}{lcr}
+    \multicolumn{3}{c}{Semiconductor type} \\
+    \toprule
+    & p-type & n-type \\
+    \midrule
+    electron density & $n\approx N_D$ & $n\approx\dfrac{n_i^2}{N_A}$ \\
+    hole density     & $p\approx\dfrac{n_i^2}{N_D}$ & $p\approx N_A$ \\
+    \bottomrule
+\end{tabular}}
+{\centering
+\begin{tabular}{ll}
+    % \toprule
+    \multicolumn{2}{c}{General values} \\
+    \toprule
+    $e^-$ density (Si) & $n_i=5.2\times10^{15}\cdot T^{3/2}\exp\left[\dfrac{-Eg}{2kT}\right]$ \\[0.4cm]
+    $e^-$ density @ 300K & $n_i\approx10^{10}$ \\[0.4cm]
+    thermal voltage & $V_T= \dfrac{kT}{q}$ \\[0.4cm]
+    internal voltage & $|V_0|=-\dfrac{kT}{q}\ln\left[\dfrac{N_AN_D}{n_i^2}\right]$\\[0.4cm]
+    Saturation Current & $|I_S|=Aqn_i^2\left[\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\right]$\\[0.4cm]
+    Forward Current & $I_S=\exp\left[\left(\dfrac{V_D}{V_T}\right)-1\right]$\\[0.4cm]
+    \bottomrule
+\end{tabular}}
+\end{multicols}
+\end{minipage}
+
+\section*{Diode Modeling}
+\begin{minipage}{0.5\linewidth}
+\subsection*{Exponential model}
+\begin{align*}
+    I_D&=I_S\exp\left(\dfrac{V_D}{\eta V_T}\right)
+\end{align*}
+\vfill
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\subsection*{Small-signal model}
+\hspace{20pt}
+\begin{minipage}{0.15\textwidth}
+    \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm,scale=0.6,american]
+    \draw 
+        (0, 0)
+        to [R, l^=$r_D$, european] (0, -3);
+    \draw ( 0,  0) node[circ]{} node[]{};
+    \draw ( 0, -3) node[circ]{} node[]{};
+    \end{circuitikz}
+\end{minipage}
+\begin{minipage}{0.8\textwidth}
+    \begin{align*}
+        r_D=\dfrac{1}{g_D}=\dfrac{\eta V_T}{I_D}
+    \end{align*}
+\end{minipage}
+\end{minipage}
+
+\end{document}
+ 
