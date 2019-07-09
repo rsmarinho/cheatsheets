@@ -11,10 +11,10 @@
 			paper=a4paper,
 % 			showframe,
 % 			includeheadfoot,
-			top=1.5cm, 
-			bottom=1.5cm, 
-			left=1.5cm,
-			right=1.5cm,
+			top=1.2cm, 
+			bottom=1.2cm, 
+			left=1.2cm,
+			right=1.2cm,
 			head=0cm,
 			foot=0cm,
 			headheight=0cm,
@@ -32,7 +32,7 @@
 
 \pagenumbering{gobble}
 
-% \setlength{\columnseprule}{1pt} %Separator ruler width
+\setlength{\columnseprule}{1pt} %Separator ruler width
 % \def\columnseprulecolor{\color{blue}} %Separator ruler colour
 
 \title{Diode Cheat Sheet}
@@ -45,21 +45,27 @@
 \begin{multicols}{3}
 \noindent
 \begin{align*}
-q &= 1.6\times10^{-19}\\
-k &= 1.38\times10^{-23}\\
+\mbox{electron charge: } q &= 1.6\times10^{-19}\\
+\mbox{Boltzmann's constant: }k &= 1.38\times10^{-23}
 \end{align*}
 \begin{align*}
 \mu_n &\approx 1350\,cm^2/(V\cdot s)\\
-\mu_p &\approx 480\,cm^2/(V\cdot s)\\
+\mu_p &\approx 480\,cm^2/(V\cdot s)
 \end{align*}
 \begin{align*}
 D_n &\approx 34\,cm^2/s\\
-D_p &\approx 12\,cm^2/s\\
+D_p &\approx 12\,cm^2/s
 \end{align*}
 \end{multicols}
 \section*{PN Junction}
 \subsection*{General semiconductor equations}
-\begin{minipage}{0.15\linewidth}
+\begin{minipage}[t]{0.5\linewidth}
+\vspace{0pt}
+\setlength{\fboxsep}{0pt}
+\setlength{\fboxrule}{0.5pt}
+\fbox{
+\begin{minipage}[t]{0.25\linewidth}
+\vspace{0pt}
     \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm,scale=0.6,american voltages]
     \draw 
         (0, 0)
@@ -77,34 +83,61 @@ D_p &\approx 12\,cm^2/s\\
     \draw (0,1) node[]{\footnotesize\textbf{Direct}};
     \draw (2,1) node[]{\footnotesize\textbf{Inverse}};
     \end{circuitikz}
-\end{minipage}
-\begin{minipage}{0.8\linewidth}
-\setlength\columnsep{0pt}
-\begin{multicols}{2}
-{\centering
+\end{minipage}}
+\hfill
+\begin{minipage}[t]{0.7\linewidth}
+\vspace{0pt}
+\centering
 \begin{tabular}{lcr}
     \multicolumn{3}{c}{Semiconductor type} \\
     \toprule
     & p-type & n-type \\
     \midrule
-    electron density & $n\approx N_D$ & $n\approx\dfrac{n_i^2}{N_A}$ \\
-    hole density     & $p\approx\dfrac{n_i^2}{N_D}$ & $p\approx N_A$ \\
+    electron density & $n\approx N_D$ & $n\approx\dfrac{n_i^2}{N_A}$ \\[0.4cm]
+    hole density     & $p\approx\dfrac{n_i^2}{N_D}$ & $p\approx N_A$ \\[0.4cm]
     \bottomrule
-\end{tabular}}
-{\centering
+\end{tabular}
+\end{minipage}
+
+\begin{minipage}[t]{\textwidth}
+\vspace{16pt}
+\centering
+\begin{tabular}{lcr}
+    % \multicolumn{3}{c}{Semiconductor type} \\
+    \toprule
+    \\[-8pt]
+    $I_{diff,tot}$ &=& $Aq(\mu_n n+\mu_p p)\cdot E$ \\[0.4cm]
+    $I_{drift,tot}$ &=& $Aq\left(D_n\dfrac{dn}{dx}-D_p\dfrac{dp}{dx}\right)$ \\[0.4cm]
+    \bottomrule
+\end{tabular}
+\vspace{10pt}
+$$
+    \mbox{if thermal equilibrium: }
+    \left\{
+        \begin{array}{ll}
+            |I_{tot,n}| &= |I_{drift,n}|+|I_{diff,n}| \\[0.4cm]
+            |I_{tot,p}| &= |I_{drift,p}|+|I_{diff,p}|
+        \end{array}
+    \right.
+$$
+\end{minipage}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.5\linewidth}
+\vspace{0pt}
+\centering
 \begin{tabular}{ll}
     % \toprule
     \multicolumn{2}{c}{General values} \\
     \toprule
     $e^-$ density (Si) & $n_i=5.2\times10^{15}\cdot T^{3/2}\exp\left[\dfrac{-Eg}{2kT}\right]$ \\[0.4cm]
     $e^-$ density @ 300K & $n_i\approx10^{10}$ \\[0.4cm]
-    thermal voltage & $V_T= \dfrac{kT}{q}$ \\[0.4cm]
+    thermal voltage & $V_T= \dfrac{kT}{q} =\dfrac{D}{\mu}$\\[0.4cm]
     internal voltage & $|V_0|=-\dfrac{kT}{q}\ln\left[\dfrac{N_AN_D}{n_i^2}\right]$\\[0.4cm]
-    Saturation Current & $|I_S|=Aqn_i^2\left[\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\right]$\\[0.4cm]
-    Forward Current & $I_S=\exp\left[\left(\dfrac{V_D}{V_T}\right)-1\right]$\\[0.4cm]
+    Saturation Current & $I_S=Aqn_i^2\left[\dfrac{D_n}{N_AL_n}+\dfrac{D_p}{N_DL_p}\right]$\\[0.4cm]
+    Forward Current & $I_D=I_S\exp\left[\left(\dfrac{V_D}{V_T}\right)-1\right]$\\[0.4cm]
     \bottomrule
-\end{tabular}}
-\end{multicols}
+\end{tabular}
 \end{minipage}
 
 \section*{Diode Modeling}
@@ -135,4 +168,4 @@ D_p &\approx 12\,cm^2/s\\
 \end{minipage}
 
 \end{document}
- 
+
