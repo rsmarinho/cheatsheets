@@ -1,0 +1,181 @@
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[brazilian]{babel}
+
+\renewcommand*\familydefault{\sfdefault}
+
+\usepackage[
+			paper=a4paper,
+% 			showframe,
+% 			includeheadfoot,
+			top=1.5cm, 
+			bottom=1.5cm, 
+			left=1.5cm,
+			right=1.5cm,
+			head=0cm,
+			foot=0cm,
+			headheight=0cm,
+			headsep=0cm,
+			marginparsep=0cm,
+			footskip=0cm
+			]{geometry}
+			
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{siunitx}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{circuitikz}
+
+\pagenumbering{gobble}
+
+% \setlength{\columnseprule}{1pt} %Separator ruler width
+% \def\columnseprulecolor{\color{blue}} %Separator ruler colour
+
+\title{Transistor Cheat Sheet}
+\author{Rafael Marinho}
+\date{}
+
+\begin{document}
+\maketitle
+\section*{Bipolar transistor (NPN)}
+\subsection*{General Node Equations}
+\begin{minipage}{0.15\linewidth}
+    \begin{circuitikz}[american voltages]
+        \draw (0,0) node[npn](npn){};
+        \draw (npn.E) node[circ]{} node[right]{E};
+        \draw (npn.C) node[circ]{} node[right]{C};
+        \draw (npn.B) node[circ]{} node[above]{B};
+        
+        \draw (-1.8, 0) to[short, i^>=$I_B$] ( -0.8, 0);
+        \draw ( 0, 1.8) to[short, i^>=$I_C$] (  0, 0.8);
+        \draw ( 0,-0.8) to[short, i^>=$I_E$] ( 0, -1.8);
+    \end{circuitikz}
+\end{minipage}
+\begin{minipage}{0.8\linewidth}
+\begin{multicols}{3}
+\noindent
+    \begin{align*}
+        V_{CE}&=V_{CB}+V_{BE}\\
+        I_E&=I_C+I_B\\
+        I_C&=\beta I_B
+    \end{align*}
+    \begin{align*}
+        \beta&=\frac{\alpha+1}{\alpha}\\
+        \alpha&=\frac{\beta}{\beta+1}\\
+        \beta&=\beta_F\left(1+\frac{V_{CB}}{V_T}\right)
+    \end{align*}
+    \begin{align*}
+        I_C&=I_S\exp\left(\frac{V_{BE}}{V_T}\right)\\
+        I_C&=I_S\exp\left(\frac{V_{BE}}{V_T}\right)\underbrace{\left[1+\frac{V_{CE}}{V_A}\right]}_{\substack{\text{Early voltage}\\\text{corrective terRm}}}
+    \end{align*}
+\end{multicols}
+\end{minipage}
+
+\subsection*{Small-signal model}
+\begin{minipage}{0.5\linewidth}
+    \begin{circuitikz}[/tikz/circuitikz/bipoles/length=1cm,scale=0.6,american]
+        % \draw ( 5, -1.75) node[draw=red, rounded corners=4pt, thick, fill=black!20, opacity=0.4, minimum height=7.5em, minimum width=15em] () {};
+        
+        \draw 
+        (0, 0)
+        to[short] ( 2, 0)
+        to [R, l^=$r_\pi$, european] (2, -3)
+        to [short] (5, -3)
+        to [cI, invert, l_=$g_mv_\pi$] (5, 0)
+        to[short] (10, 0)
+        
+        (4,-3) to [short] (4, -4.5)
+        (8, 0) to [R, l^=$r_O$, european] ( 8, -3);
+        
+        \draw ( 8, -2.7) node[cground]{};
+        
+        \draw ( 0,  0) node[circ]{} node[above]{B};
+        \draw ( 10,  0) node[circ]{} node[above]{C};
+        \draw ( 4, -4.5) node[circ]{} node[right]{E};
+        
+        \draw ( 1, -0.5) node[]{$+$};
+        \draw ( 1, -1.5) node[]{$v_\pi$};
+        \draw ( 1, -2.5) node[]{$-$};
+
+    \end{circuitikz}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+\begin{multicols}{3}
+\noindent
+    \begin{align*}
+        r_\pi&=\frac{V_T}{I_{B0}}
+    \end{align*}
+    \begin{align*}
+        g_m&=\frac{I_{C0}}{V_T}
+    \end{align*}
+    \begin{align*}
+        r_O&=\frac{V_A}{I_{C0}}
+    \end{align*}
+\end{multicols}
+\end{minipage}
+
+\subsection*{Amplifiers}
+\noindent
+\begin{minipage}[b][6cm][t]{0.58\linewidth}
+\begin{center}
+\bf Common-Emitter (CE)
+\end{center}
+
+\begin{minipage}[b][5cm][t]{0.5\linewidth}
+    \begin{center}
+        without degeneration
+    \end{center}
+    \begin{align*}
+        A_V&=-g_mR_C\\
+        R_{in}&=(R_B\|r_\pi)\\
+        R_{out}&=R_C
+    \end{align*}
+    \vfill
+\end{minipage}
+%%%%%%%%%%%%%%
+\begin{minipage}[b][5cm][t]{0.5\linewidth}
+    \begin{center}
+        with degeneration
+    \end{center}
+    \begin{align*}
+        A_V&=\cfrac{-g_mR_C }{1+\left(\cfrac{1}{r_\pi}+g_m\right)R_E}\\
+        R_{in}&=(R_E\|R_{in,B})\\
+        R_{in,B}&=r_\pi\left[1+\left(\frac{1}{r_\pi}+g_m\right)R_E\right]\\
+        R_{out}&=R_C
+    \end{align*}
+\end{minipage}
+\end{minipage}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hfill
+\begin{minipage}[b][6cm][t]{0.38\linewidth}
+\begin{center}
+{\bf Common-Base (CB)}
+
+for $V_A=\infty$
+\end{center}
+\begin{align*}
+        A_V&=g_mR_C\\
+        R_{in}&=(r_\pi\|R_C\|\cfrac{1}{g_m})\\
+        R_{in}&\approx\cfrac{1}{g_m},\,\,\mbox{for } I_C>>I_B\\
+        R_{out}&=R_C
+    \end{align*}
+\end{minipage}
+\begin{minipage}[b][3cm][t]{0.3\linewidth}
+\begin{center}
+{\bf Common-Collector (CC)}
+
+for $V_A=\infty$
+\end{center}
+\begin{align*}
+        A_V&=\cfrac{-g_mR_C }{1+\cfrac{1}{R_E\left(\cfrac{1}{r_\pi}+g_m\right)}}\\
+        % A_V&=\cfrac{R_E(1+\beta)}{v_\pi+R_E(1+\beta)}\\
+        R_{in}&=r_{\pi}+(1+\beta)R_E\\
+        R_{out}&=(R_E\|R_{in,B}\|\cfrac{1}{g_m})
+    \end{align*}
+\end{minipage}
+
+\end{document}
+
